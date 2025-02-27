@@ -40,7 +40,7 @@ body{
 
     .container h1{
         font-size: 36px;
-        margin: -10px 0;
+        margin: 0px 0;
     }
 
     .container p{
@@ -74,32 +74,20 @@ form{ width: 100%; }
     position: relative;
     margin: 0;
     height: 60px;
+    margin-top: 9px;
 }
 
     .input-box input{
         width: 100%;
         padding: 13px 50px 13px 20px;
-        background: #eee;
         border-radius: 8px;
+        background-color: white;
         border: none;
         outline: none;
         font-size: 16px;
         color: #333;
         font-weight: 500;
         height: 40px;
-    }
-
-        .input-box input::placeholder{
-            color: #888;
-            font-weight: 400;
-        }
-
-    .input-box i{
-        position: absolute;
-        right: 20px;
-        top: 34%;
-        transform: translateY(-50%);
-        font-size: 20px;
     }
 
 .forgot-link{
@@ -204,27 +192,18 @@ form{ width: 100%; }
     .phone-address{
         display: flex;
         gap: 5px;
-        margin-bottom: 10px;
-    }
-    .phone-address>div{
-        width: 170px;
+        padding: 0;
+        margin: 15px 0 15px;
     }
     #phone,#address{
         display: flex;
-        background-color: #EEEEEE;
         height: 40px;
         align-items: center;
         border-radius: 10px;
         padding: 5px;
     }
     #phone input,#address input{
-        background-color: #EEEEEE;
-        border: none;
         width: 140px;
-    }
-    #phone input:focus,#address input:focus{
-        border: none;
-        outline: none;
     }
     .error-message{
         display: flex;
@@ -234,6 +213,9 @@ form{ width: 100%; }
         padding: 0;
         align-items: center;
         margin-top: 3px;
+    }
+    .error-message.e1 {
+        margin-top: 13px;
     }
     #back{
         background-color: #FA4226;
@@ -292,26 +274,73 @@ form{ width: 100%; }
         }
 
             .container.active .toggle-panel.toggle-right{ bottom: 0; }
+            }
+
+                @media screen and (max-width: 400px){
+                    .form-box { padding: 20px; }
+
+                    .toggle-panel h1{font-size: 30px; }
+                }
+                .input-group {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
 }
 
-@media screen and (max-width: 400px){
-    .form-box { padding: 20px; }
-
-    .toggle-panel h1{font-size: 30px; }
+.input-group input {
+    width: 100%;
+    padding: 12px 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+    transition: 0.3s;
 }
 
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #aaa;
+    transition: 0.3s ease-in-out;
+    pointer-events: none;
+    background: white;
+    padding: 0 5px;
+}
+
+/* Khi input được focus hoặc có giá trị */
+.input-group input:focus,
+.input-group input:valid {
+    border-color: #2ab27b;
+}
+
+.input-group input:focus + label,
+.input-group input:valid + label {
+    top: 0;
+    font-size: 14px;
+    color: #2ab27b;
+}
+#textLogin{
+    height: 20px;
+    line-height: 20px;
+    margin: 0;
+}
     </style>
 </head>
 <body>
     <div id="back" onclick="window.location.href='http://127.0.0.1:8000/';"><-</div>
-    <div class="container">
+    <div class="container" id="container">
         <div class="form-box login">
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <h1>Đăng nhập</h1>
                 <div class="input-box">
-                    <input type="email" name="email" placeholder="Email" value="{{ old('email') }}">
-                    <i class='bx bxs-user'></i>
+                    <div class="input-group">
+                        <input type="email" name="email">
+                        <label for="email">email</label>
+                    </div>
                     @error('email')
                         <div class="error-message">
                             <ion-icon name="alert-circle-outline"></ion-icon>
@@ -320,8 +349,10 @@ form{ width: 100%; }
                     @enderror
                 </div>
                 <div class="input-box">
-                    <input type="password" name="password" placeholder="Mật khẩu">
-                    <i class='bx bxs-lock-alt' ></i>
+                    <div class="input-group">
+                        <input type="password" name="password">
+                        <label for="password">Mật khẩu</label>
+                    </div>
                     @error('password')
                         <div class="error-message">
                             <ion-icon name="alert-circle-outline"></ion-icon>
@@ -348,8 +379,10 @@ form{ width: 100%; }
                 @csrf
                 <h1>Đăng ký</h1>
                 <div class="input-box">
-                    <input type="text" name="name" placeholder="Họ và tên" value="{{ old('name') }}">
-                    <i class='bx bxs-user'></i>
+                    <div class="input-group">
+                        <input required type="text" name="name" value="{{ old('name') }}">
+                        <label for="name">Họ và tên</label>
+                    </div>
                     @error('name')
                     <div class="error-message">
                         <ion-icon name="alert-circle-outline"></ion-icon>
@@ -358,8 +391,10 @@ form{ width: 100%; }
                 @enderror
                 </div>
                 <div class="input-box">
-                    <input type="text" name="email" placeholder="@gmail.com" value="{{ old('email') }}">
-                    <i class='bx bx-envelope'></i>
+                    <div class="input-group">
+                        <input type="text" name="email"  value="{{ old('email') }}">
+                        <label for="email">Email</label>
+                    </div>
                     @error('email')
                     <div class="error-message">
                         <ion-icon name="alert-circle-outline"></ion-icon>
@@ -368,8 +403,10 @@ form{ width: 100%; }
                 @enderror
                 </div>
                 <div class="input-box">
-                    <input type="password" name="password" placeholder="Mật khẩu">
-                    <i class='bx bxs-lock-alt' ></i>
+                    <div class="input-group">
+                        <input type="password" name="password" >
+                        <label for="password">Mật khẩu</label>
+                    </div>
                     @error('password')
                         <div class="error-message">
                             <ion-icon name="alert-circle-outline"></ion-icon>
@@ -378,8 +415,10 @@ form{ width: 100%; }
                     @enderror
                 </div>
                 <div class="input-box">
-                    <input type="password" name="password_confirmation" placeholder="Nhập lại mật khẩu">
-                    <i class='bx bxs-lock-alt' ></i>
+                    <div class="input-group">
+                        <input required type="password" name="password_confirmation" >
+                        <label for="password_confirmation">nhập lại mật khẩu</label>
+                    </div>
                     @error('password_confirmation')
                     <div class="error-message">
                         <ion-icon name="alert-circle-outline"></ion-icon>
@@ -390,11 +429,13 @@ form{ width: 100%; }
                 <div class="phone-address">
                     <div>
                         <div id="phone">
-                            <input type="text" name="phone" placeholder="Số điện thoại" value="{{ old('phone') }}">
-                            <i class='bx bx-phone'></i>
+                            <div class="input-group">
+                                <input  type="text" name="phone" value="{{ old('phone') }}">
+                                <label for="phone">Số điện thoại</label>
+                            </div>
                         </div>
                         @error('phone')
-                            <div class="error-message">
+                            <div class="error-message e1">
                                 <ion-icon name="alert-circle-outline"></ion-icon>
                                 <p>{{ $message }}</p>
                             </div>
@@ -402,20 +443,21 @@ form{ width: 100%; }
                     </div>
                     <div>
                         <div id="address">
-                            <input type="text" name="address" placeholder="Địa chỉ" value="{{ old('address') }}">
-                            <i class='bx bx-map'></i>
+                            <div class="input-group">
+                                <input  type="text" name="address" value="{{ old('address') }}">
+                                <label for="address">Địa chỉ</label>
+                            </div>
                         </div>
                         @error('address')
-                            <div class="error-message">
+                            <div class="error-message e1">
                                 <ion-icon name="alert-circle-outline"></ion-icon>
                                 <p>{{ $message }}</p>
                             </div>
                         @enderror
                     </div>
-
                 </div>
                 <button type="submit" class="btn">Đăng ký</button>
-                <p>hoặc đăng nhập bằng</p>
+                <p id="textLogin">hoặc đăng nhập bằng</p>
                 <div class="social-icons">
                     <a href="#"><i class='bx bxl-google' ></i></a>
                     <a href="#"><i class='bx bxl-facebook' ></i></a>
@@ -439,47 +481,37 @@ form{ width: 100%; }
             </div>
         </div>
     </div>
-    {{-- <div class="login-container">
-        <ion-icon name="car-sport" onclick="window.location.href='http://127.0.0.1:8000/';" style="cursor: pointer"></ion-icon>
-        <h2>Đăng nhập</h2>
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-            <input type="email" name="email" placeholder="Email" >
-            @error('email')
-                <div class="error-message">
-                    <ion-icon name="alert-circle-outline"></ion-icon>
-                    <p>{{ $message }}</p>
-                </div>
-            @enderror
-            <input type="password" name="password" placeholder="Mật khẩu">
-            @error('password')
-                <div class="error-message">
-                    <ion-icon name="alert-circle-outline"></ion-icon>
-                    <p>{{ $message }}</p>
-                </div>
-            @enderror
-            <button type="submit">Đăng nhập</button>
-        </form>
-        <div>
-            <a href="{{route('password.request')}}">Quên mật khẩu?</a>
-            <div id="resgiter">
-                <p>bạn chưa có tài khoản?</p>
-                <a href="/register">nhấn để đăng kí</a>
-            </div>
-        </div>
-    </div> --}}
     <script>
-        const container = document.querySelector('.container');
-const registerBtn = document.querySelector('.register-btn');
-const loginBtn = document.querySelector('.login-btn');
+const container = document.getElementById('container');
+    const registerBtn = document.querySelector('.register-btn');
+    const loginBtn = document.querySelector('.login-btn');
 
-registerBtn.addEventListener('click', () => {
-    container.classList.add('active');
-})
+    registerBtn.addEventListener('click', () => {
+        container.classList.add('active');
+        sessionStorage.setItem('auth_tab', 'register'); // Lưu trạng thái vào sessionStorage
+    });
 
-loginBtn.addEventListener('click', () => {
-    container.classList.remove('active');
-})
+    loginBtn.addEventListener('click', () => {
+        container.classList.remove('active');
+        sessionStorage.setItem('auth_tab', 'login'); // Lưu trạng thái vào sessionStorage
+    });
+
+    // Kiểm tra lỗi từ session và giữ trạng thái phù hợp
+    document.addEventListener('DOMContentLoaded', function () {
+        let authTab = sessionStorage.getItem('auth_tab');
+
+        @if(session('register_error'))
+            authTab = 'register';
+        @elseif(session('login_error'))
+            authTab = 'login';
+        @endif
+
+        if (authTab === 'register') {
+            container.classList.add('active');
+        } else {
+            container.classList.remove('active');
+        }
+    });
     </script>
 </body>
 </html>

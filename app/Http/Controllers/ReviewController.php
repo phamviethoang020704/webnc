@@ -29,34 +29,70 @@ class ReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(StoreReviewRequest $request)
+    // {
+    //     $review = new Review();
+    //     $booking = Booking::where('user_id', auth()->id())
+    //                   ->where('car_id', $request->car_id)
+    //                   ->first();
+
+    // if (!$booking || !$booking->browsing_status) {
+    //     return redirect()->back()->with('error', 'Chỉ cho phép bình luận khi đơn đặt xe đã được duyệt.');
+    // }
+
+    // // Kiểm tra nếu người dùng đã bình luận trước đó
+    // $existingReview = Review::where('user_id', auth()->id())
+    //                         ->where('car_id', $request->car_id)
+    //                         ->first();
+
+    // // Nếu người dùng đã bình luận trước đó, trả về thông báo lỗi
+    // if ($existingReview) {
+    //     return redirect()->back()->with('error', 'Bạn chỉ có thể bình luận một lần cho mỗi chiếc xe.');
+    // }
+    //     Review::create([
+    //         'car_id' => $request->car_id,
+    //         'booking_id' => $request->booking_id,
+    //         'user_id' => auth()->id(),
+    //         'rating' => $request->rating,
+    //         'comment' => $request->comment,
+    //     ]);
+    //     return redirect('/');
+    // }
     public function store(StoreReviewRequest $request)
     {
-        $review = new Review();
         $booking = Booking::where('user_id', auth()->id())
-                      ->where('car_id', $request->car_id)
-                      ->first();
+            ->where('car_id', $request->car_id)
+            ->where('id', $request->booking_id)
+            ->where('browsing_status', true)
+            ->where('admin_give_back', true)
+            ->first();
 
-    if (!$booking || !$booking->browsing_status) {
-        return redirect()->back()->with('error', 'Chỉ cho phép bình luận khi đơn đặt xe đã được duyệt.');
-    }
+        if (!$booking) {
+            return redirect()->back()->with('error', 'Bạn chỉ có thể bình luận khi đơn hàng đã được duyệt và hoàn tất.');
+        }
 
-    // Kiểm tra nếu người dùng đã bình luận trước đó
-    $existingReview = Review::where('user_id', auth()->id())
-                            ->where('car_id', $request->car_id)
-                            ->first();
+        // Kiểm tra nếu user đã review đơn hàng này chưa
+        $existingReview = Review::where('user_id', auth()->id())
+            ->where('booking_id', $booking->id)
+            ->exists();
 
-    // Nếu người dùng đã bình luận trước đó, trả về thông báo lỗi
-    if ($existingReview) {
-        return redirect()->back()->with('error', 'Bạn chỉ có thể bình luận một lần cho mỗi chiếc xe.');
-    }
+        if ($existingReview) {
+            return redirect()->back()->with('error', 'Bạn chỉ có thể bình luận một lần cho mỗi đơn hàng.');
+        }
+
         Review::create([
             'car_id' => $request->car_id,
+            'booking_id' => $booking->id,
             'user_id' => auth()->id(),
             'rating' => $request->rating,
             'comment' => $request->comment,
         ]);
-        return redirect('/');
+
+        return redirect()->back()->with('success', 'Cảm ơn bạn đã đánh giá!');
     }
+
+
+
 
     /**
      * Display the specified resource.

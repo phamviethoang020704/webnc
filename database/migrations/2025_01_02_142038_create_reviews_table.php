@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('car_id');
+            $table->integer('booking_id');
             $table->enum('rating', ['1', '2', '3', '4', '5']);
             $table->text('comment');
             $table->timestamps();

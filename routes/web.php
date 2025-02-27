@@ -54,7 +54,7 @@ Route::middleware('auth','role:admin')->group(function(){
     Route::post('/admin/bookings/{id}',[AdminController::class,'approveBooking'])->name('admin.approveBooking');
     Route::post('/admin/bookings/adminGiveBack/{id}',[AdminController::class,'adminGiveBack'])->name('admin.adminGiveBack');
 });
-Route::get('/booking/{id}/edit',[BookingController::class, 'edit'])->name('booking.edit');
+Route::get('/booking/{id}/edit/{car}',[BookingController::class, 'edit'])->name('booking.edit');
 Route::get('/booking/{id}',[BookingController::class, 'update'])->name('booking.update');
 Route::delete('/booking/{id}',[CarController::class,'destroy'])->name('booking.destroy');
 Route::get('/review/create',[ReviewController::class,'create'])->name('review.create');

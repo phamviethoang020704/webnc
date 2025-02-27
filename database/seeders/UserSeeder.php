@@ -38,10 +38,10 @@ class UserSeeder extends Seeder
                 'role' => 'user'
             ],
             [
-                'name' => 'Dao lan anh',
+                'name' => 'Hoang 9 Viet',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-                'email' => 'lanh@gmail.com',
+                'email' => 'Hoang9@gmail.com',
                 'email_verified_at' => Carbon::now(),
                 'password' => Hash::make('123123'),
                 'phone' => '0123456789',

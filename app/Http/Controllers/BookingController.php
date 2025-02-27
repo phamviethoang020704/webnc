@@ -60,10 +60,11 @@ class BookingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit($id,$car_id)
     {
+        $car = Car::findOrFail($car_id);
         $booking = Booking::find($id);
-        return view('booking.edit_booking', compact('booking'));
+        return view('booking.edit_booking', compact('booking','car'));
     }
 
     /**

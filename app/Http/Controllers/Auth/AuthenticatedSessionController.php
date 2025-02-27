@@ -42,17 +42,23 @@ class AuthenticatedSessionController extends Controller
 
     $user = User::where('email', $request->email)->first();
 
+    // if (!$user || !$user->hasVerifiedEmail()) {
+    //     throw ValidationException::withMessages([
+    //         'email' => 'Bạn cần xác thực email trước khi đăng nhập.',
+    //     ]);
+    // }
     if (!$user || !$user->hasVerifiedEmail()) {
-        throw ValidationException::withMessages([
-            'email' => 'Bạn cần xác thực email trước khi đăng nhập.',
-        ]);
+        return back()
+            ->withErrors(['email' => 'Bạn cần xác thực email trước khi đăng nhập.'])
+            ->with('login_error', true); // Đánh dấu lỗi đăng nhập
     }
 
     if (Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect('/car');
     }
 
-    return back()->withErrors(['email' => 'Thông tin đăng nhập không chính xác.']);
+    return back()->withErrors(['email' => 'Thông tin đăng nhập không chính xác.'])->with('login_error', true);;
 }
 
     /**

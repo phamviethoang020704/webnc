@@ -574,7 +574,7 @@
                         <a class="login" href="{{ route('login') }}">Đăng nhập</a>
 
                         @if (Route::has('register'))
-                            <a class="register" href="{{ route('register') }}">Đăng ký</a>
+                            <a class="register" href="{{ route('login') }}">Đăng ký</a>
                         @endif
                     @endauth
                 </div>
@@ -609,7 +609,7 @@
                     <a class="login-responsive" href="{{ route('login') }}">Đăng nhập</a>
 
                     @if (Route::has('register'))
-                        <a class="register-responsive" href="{{ route('register') }}">Đăng ký</a>
+                        <a class="register-responsive" href="{{ route('login') }}">Đăng ký</a>
                     @endif
                 @endauth
             </div>
@@ -623,12 +623,12 @@
         <h1>Cần thêm thông tin?</h1>
         <p>Một chuyên gia đa năng có kỹ năng trong nhiều lĩnh vực nghiên cứu, phát triển cũng như là một chuyên gia học tập. Hơn 15 năm kinh nghiệm.</p>
         <h3>0123 456 789</h3>
-        <h3>Lananh@gmail.com</h3>
+        <h3>Hoang@gmail.com</h3>
         <h3>Hà Đông, Hà Nội</h3>
     </div>
     <div id="add-info-right">
         <h1>Họ và tên <span>*</span> </h1>
-        <input type="text" id="name" placeholder="ví dụ: Đào Lan Anh">
+        <input type="text" id="name" placeholder="ví dụ: Pham Viet Hoang">
         <h1>Email <span>*</span> </h1>
         <input type="text" placeholder="Email của bạn @gmail.com">
         <h1>Bạn cần hỗ trợ gì? <span>*</span> </h1>
@@ -662,8 +662,8 @@
                 <h1>Thuê xe</h1>
                 <p>Chúng tôi cung cấp nhiều loại xe đáp ứng mọi nhu cầu lái xe của bạn. Chúng tôi có chiếc xe hoàn hảo để đáp ứng nhu cầu của bạn.</p>
                 <h2>0123-456-789</h2>
-                <h3>Lanh@gmail.com</h3>
-                <h4>Thiết kế: Dao Lan Anh</h4>
+                <h3>Hoang@gmail.com</h3>
+                <h4>Thiết kế: Pham Viet Hoàng</h4>
             </div>
             <div id="footer-2">
                 <h1>Công ty</h1>

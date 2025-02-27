@@ -17,8 +17,14 @@ class Booking extends Model
     public function car(){
         return $this->belongsTo(Car::class);
     }
+    public function reviews(){
+        return $this->hasMany(Review::class);
+    }
     public function getCarReturnDeadlineAttribute()
     {
+        if (!$this->browsing_status){
+            return 'Đơn chưa duyệt';
+        }
         if ($this->admin_give_back) {
             return 'Đã trả xe';
         }

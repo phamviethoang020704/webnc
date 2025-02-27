@@ -743,7 +743,7 @@
             @endif
         </div>
         <!-- user comment -->
-        <div id="input-box-comment">
+        {{-- <div id="input-box-comment">
             @if (auth()->check())
             @php
                 // Kiểm tra xem người dùng đã đặt xe này và xem trạng thái của đơn đặt xe
@@ -789,6 +789,62 @@
         @else
             <p>Bạn cần <a href="{{ route('login') }}">đăng nhập</a> để bình luận.</p>
         @endif
+        </div> --}}
+        <div id="input-box-comment">
+            @if (auth()->check())
+                @php
+                    // Lấy danh sách tất cả đơn đặt xe hợp lệ của user cho xe này
+                    $bookings = $car->bookings()
+                        ->where('user_id', auth()->id())
+                        ->where('browsing_status', true)
+                        ->where('admin_give_back', true)
+                        ->get();
+
+                    // Tìm đơn đặt xe chưa được review
+                    $bookingToReview = null;
+                    foreach ($bookings as $booking) {
+                        $existingReview = $car->reviews()
+                            ->where('user_id', auth()->id())
+                            ->where('booking_id', $booking->id)
+                            ->exists();
+                        if (!$existingReview) {
+                            $bookingToReview = $booking;
+                            break;
+                        }
+                    }
+                @endphp
+
+                @if ($bookingToReview)
+                    <form id="form-review" action="{{ route('reviews.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="car_id" value="{{ $car->id }}">
+                        <input type="hidden" name="booking_id" value="{{ $bookingToReview->id }}">
+
+                        <!-- Phần sao đánh giá -->
+                        <label for="rating">Đánh giá trải nghiệm của bạn: </label>
+                        <div class="stars">
+                            <span class="star" data-value="1">&#9733;</span>
+                            <span class="star" data-value="2">&#9733;</span>
+                            <span class="star" data-value="3">&#9733;</span>
+                            <span class="star" data-value="4">&#9733;</span>
+                            <span class="star" data-value="5">&#9733;</span>
+                        </div>
+                        <input type="hidden" name="rating" id="rating" value="0">
+
+                        <!-- Phần bình luận -->
+                        <div id="textarea-comment">
+                            <p>{{ auth()->user()->name }}</p>
+                            <label for="comment"></label>
+                            <textarea placeholder="Viết gì đó..." name="comment" id="comment" rows="3" cols="50" required></textarea>
+                        </div>
+                        <button type="submit">Gửi bình luận</button>
+                    </form>
+                @else
+                    <p>Bạn đã đánh giá tất cả các đơn hàng của mình.</p>
+                @endif
+            @else
+                <p>Bạn cần <a href="{{ route('login') }}">đăng nhập</a> để bình luận.</p>
+            @endif
         </div>
 
 
@@ -841,8 +897,8 @@
             <h1>Thuê xe</h1>
             <p>Chúng tôi cung cấp nhiều loại xe đáp ứng mọi nhu cầu lái xe của bạn. Chúng tôi có chiếc xe hoàn hảo để đáp ứng nhu cầu của bạn.</p>
             <h2>0123-456-789</h2>
-            <h3>Lanh@gmail.com</h3>
-            <h4>Thiết kế: Dao Lan Anh</h4>
+            <h3>Hoang@gmail.com</h3>
+            <h4>Thiết kế: Pham viet Hoang</h4>
         </div>
         <div id="footer-2">
             <h1>Công ty</h1>

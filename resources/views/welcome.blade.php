@@ -21,6 +21,7 @@
                 position: relative;
                 scrollbar-width: thin;
                 scrollbar-color: #ff4d30 #fff;
+                max-width: 100vw; /* Không vượt quá màn hình */
             }
             #header{
                 position: relative;
@@ -124,12 +125,13 @@
                 font-size: 15px;
             }
             #hero-content h2{
-                font-size: 40px;
+                font-size: clamp(1.2rem, 4vw, 2rem);
                 margin: 10px 0;
                 width: 500px;
             }
             #hero-content h1{
-                font-size: 1.5vw;
+                /* font-size: 1.5vw; */
+                font-size: clamp(1.2rem, 4vw, 2rem);
             }
             #book-ride{
                 text-decoration: none;
@@ -238,10 +240,10 @@
                 height: 250px;
             }
             #car-features h1{
-                font-size: 20px;
+                font-size: 1.5vw;
             }
             #car-features h2{
-                font-size: 50px;
+                font-size: 2.3vw;
             }
             #car-features-2{
                 display: flex;
@@ -263,7 +265,7 @@
             .car-features p{
                 padding: 0 82px;
                 color: #888888;
-                font-size: 15px;
+                font-size: 1v;
             }
             #view-all{
                 display: flex;
@@ -274,10 +276,10 @@
                 margin-top: 100px;
             }
             #view-all h1{
-                font-size: 20px;
+                font-size: 1.8vw;
             }
             #view-all h2{
-                font-size: 50px;
+                font-size: 2.2vw;
                 margin: 10px 0 20px;
             }
             #view-all p{
@@ -500,7 +502,7 @@
                 z-index: 10;
             }
             #download-1 h1{
-                font-size: 50px;
+                font-size: 3vw;
                 max-width: 600px;
                 line-height: 80px;
             }
@@ -518,6 +520,10 @@
             }
             #download-image{
                 display: flex;
+                width: 200px;
+            }
+            #download-image img{
+                width: 100px;
             }
             #footer{
                 display: flex;
@@ -694,6 +700,9 @@
                 #menu-icon-responsive{
                     display: block;
                     z-index: 1000;
+                    position: fixed;
+                    right: 10px;
+                    top: 10px;
                 }
                 #main-car{
                     opacity: 0.2;
@@ -782,7 +791,7 @@
                             <a class="login" href="{{ route('login') }}">Đăng nhập</a>
 
                             @if (Route::has('register'))
-                                <a class="register" href="{{ route('register') }}">Đăng ký</a>
+                                <a class="register" href="{{ route('login') }}">Đăng ký</a>
                             @endif
                         @endauth
                     </div>
@@ -825,7 +834,7 @@
                             <a class="login-responsive" href="{{ route('login') }}">Đăng nhập</a>
 
                             @if (Route::has('register'))
-                                <a class="register-responsive" href="{{ route('register') }}">Đăng ký</a>
+                                <a class="register-responsive" href="{{ route('login') }}">Đăng ký</a>
                             @endif
                         @endauth
                     </div>
@@ -975,8 +984,8 @@
                 <h1>Thuê xe</h1>
                 <p>Chúng tôi cung cấp nhiều loại xe đáp ứng mọi nhu cầu lái xe của bạn. Chúng tôi có chiếc xe hoàn hảo để đáp ứng nhu cầu của bạn.</p>
                 <h2>0123-456-789</h2>
-                <h3>Lanh@gmail.com</h3>
-                <h4>Thiết kế: Dao Lan Anh</h4>
+                <h3>Hoang@gmail.com</h3>
+                <h4>Thiết kế: Pham Viet Hoang</h4>
             </div>
             <div id="footer-2">
                 <h1>Công ty</h1>
@@ -1101,6 +1110,12 @@
                     behavior: "smooth",
                 })
             })
+            //
+            document.querySelectorAll('*').forEach(el => {
+    if (el.scrollWidth > el.clientWidth) {
+        console.log(el);
+    }
+});
         </script>
     </body>
 </html>

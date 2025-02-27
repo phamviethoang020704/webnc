@@ -510,7 +510,7 @@
                         <a class="login" href="{{ route('login') }}">Đăng nhập</a>
 
                         @if (Route::has('register'))
-                            <a class="register" href="{{ route('register') }}">Đăng ký</a>
+                            <a class="register" href="{{ route('login') }}">Đăng ký</a>
                         @endif
                     @endauth
                 </div>
@@ -545,7 +545,7 @@
                     <a class="login-responsive" href="{{ route('login') }}">Đăng nhập</a>
 
                     @if (Route::has('register'))
-                        <a class="register-responsive" href="{{ route('register') }}">Đăng ký</a>
+                        <a class="register-responsive" href="{{ route('login') }}">Đăng ký</a>
                     @endif
                 @endauth
             </div>
@@ -602,8 +602,8 @@
                 <h1>Thuê xe</h1>
                 <p>Chúng tôi cung cấp nhiều loại xe đáp ứng mọi nhu cầu lái xe của bạn. Chúng tôi có chiếc xe hoàn hảo để đáp ứng nhu cầu của bạn.</p>
                 <h2>0123-456-789</h2>
-                <h3>Lanh@gmail.com</h3>
-                <h4>Thiết kế: Dao Lan Anh</h4>
+                <h3>Hoang@gmail.com</h3>
+                <h4>Thiết kế: Pham Viet Hoang</h4>
             </div>
             <div id="footer-2">
                 <h1>Công ty</h1>

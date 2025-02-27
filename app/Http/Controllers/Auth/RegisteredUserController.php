@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\VerifyEmail;
-
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 
 class RegisteredUserController extends Controller
 {
@@ -73,5 +74,14 @@ class RegisteredUserController extends Controller
     Mail::to($request->email)->send(new VerifyEmail($verificationToken));
 
     return view('auth.verify-email'); // Hiển thị trang chờ xác thực
+}
+public function failedValidation(Validator $validator)
+{
+    throw new HttpResponseException(
+        redirect()->back()
+            ->withErrors($validator)
+            ->withInput()
+            ->with('register_error', true) // Đánh dấu lỗi đăng ký
+    );
 }
 }

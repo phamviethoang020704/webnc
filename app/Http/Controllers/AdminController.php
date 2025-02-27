@@ -13,7 +13,7 @@ class AdminController extends Controller
 
         $bookingCarReturnDeadline = Booking::where('car_return_deadline',null)->get();
         $overdueBookings = $bookingCarReturnDeadline->filter(function ($booking) {
-            return $booking->carReturnDeadline !== "Đã trả xe";
+            return $booking->carReturnDeadline !== "Đã trả xe" && $booking->browsing_status == true;
         });
         return view('admin.admin', compact('bookings', 'bookingBrowsing', 'overdueBookings'));
     }

@@ -112,6 +112,111 @@
             z-index: 2;
             background-color: white;
         }
+        #content-image{
+            width: 100%;
+            position: relative;
+            background-image: url('{{ asset('storage/booking/addBookMain.jpg') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            height: 100vh;
+            margin: 0;
+        }
+        #content{
+            position: absolute;
+            width: 60%;
+            height: 80%;
+            background-color: rgba(0, 0, 0, 0.7);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            border:1px solid #fff;
+        }
+        #confirm-info-user{
+            margin-left: 5px;
+            margin-bottom: 10px;
+        }
+        #confirm-info-user h1{
+            color: whitesmoke;
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+        #confirm-info-user p{
+            color: white;
+            font-size: 15px;
+        }
+        #confirm-info-user a{
+            background-color: #FA4226;
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+            height: 25px;
+            line-height: 25px;
+            border-radius: 5px;
+            padding: 2px;
+        }
+        #info-car{
+            margin-left: 5px;
+        }
+        #info-car h1{
+            color: white;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        #info-car p{
+            color: white;
+            font-size: 15px;
+        }
+        #start-end{
+            margin-top: 20px;
+            display: flex;
+            gap: 50px;
+        }
+        .form-group{
+            margin-top: 15px;
+        }
+        .form-group label{
+            color: white;
+            font-size: 15px;
+        }
+        .form-group input{
+            width: 200px;
+            height: 30px;
+        }
+        #form{
+            margin-left: 5px;
+        }
+        #total_price:hover{
+            cursor: default;
+        }
+        #total_price:focus{
+            outline: none;
+        }
+        #form>button{
+            color: white;
+            background-color: #FA4226;
+            border-radius: 5px;
+            height: 40px;
+            line-height: 40px;
+            width: 130px;
+            border: none;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        #success-message {
+            opacity: 1;
+            transition: opacity 1s ease-out; /* Hiệu ứng mờ dần */
+            position: fixed; /* Đặt ở vị trí cố định trong view */
+            top: 50%; /* Khoảng cách từ trên cùng */
+            transform: translateY(-50%); /* Căn giữa chính xác */
+            left: 50%; /* Căn giữa */
+            transform: translateX(-50%); /* Căn giữa chính xác */
+            z-index: 9999; /* Đảm bảo thông báo không bị che khuất */
+            background-color: #FA4226;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -120,10 +225,6 @@
             <ion-icon name="car-sport"></ion-icon>
             <h3>Car Rental</h3>
         </div>
-        <ul id="header-menu">
-            <li><a  href="{{route('admin.index')}}">Đơn thuê xe</a></li>
-            <li><a href="{{route('car.create')}}">Thêm xe</a></li>
-        </ul>
         <div id="profile-logout">
             <span>{{Auth::user()->name}} ⇊</span>
             <div id="profile-logout-content">
@@ -135,30 +236,68 @@
             </div>
         </div>
     </div>
-    <form action="{{ route('bookings.update',$booking->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <input type="number" name="user_id" id="user_id" value="{{ auth()->id() }}">
-        <input type="hidden" name="car_id" id="car_id" value="{{ $booking->car->id }}">
-        <input type="text" name="price_per_day" id="price_per_day" value="{{ $booking->car->price_per_day }}">
+    <div id="content-image">
+        <div id="content">
+            <h1>Sửa thông tin xe</h1>
+            <div id="confirm-info-user">
+                <h1>Xác nhận thông tin người dùng</h1>
+                <p>Tên người dùng: {{Auth()->user()->name}}</p>
+                <p>Số điện thoại: {{Auth()->user()->phone}}</p>
+                <p>Địa chỉ: {{Auth()->user()->address}}</p>
+                <a href="{{ route('profile.edit') }}">Ấn vào đây để chỉnh sửa thông tin</a>
+            </div>
+            <div id="info-car">
+                <h1>Đơn đặt xe:</h1>
+                <p>{{$car->name}},{{$car->trademark}}</p>
+                <p>{{number_format($car->price_per_day, 0, ',', '.')}} VND / Ngày</p>
+            </div>
+            <form id="form" action="{{ route('bookings.update',$booking->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <input name="car_id" type="hidden" value="{{$car->id}}">
+                <input name="user_id" type="hidden" value="{{auth()->user()->id}}">
+                <input name="price_per_day" id="price_per_day" type="hidden" value="{{$car->price_per_day}}">
+                <div id="start-end">
 
-        <div class="form-group">
-            <label for="start_date">Ngày bắt đầu:</label>
-            <input type="date" id="start_date" name="start_date" class="form-control" required>
+                    <div class="form-group">
+                        <label for="start_date">Ngày bắt đầu</label>
+                        <br>
+                        <input type="date" id="start_date" name="start_date" class="form-control" required>
+                        @error('start_date')
+                            <div class="error-message">
+                                <ion-icon name="alert-circle-outline"></ion-icon>
+                                <p>{{ $message }}</p>
+                            </div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="end_date">Ngày kết thúc</label>
+                        <br>
+                        <input type="date" id="end_date" name="end_date" class="form-control" required>
+                        @error('end_date')
+                            <div class="error-message">
+                                <ion-icon name="alert-circle-outline"></ion-icon>
+                                <p>{{ $message }}</p>
+                            </div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="total_price">Tổng giá thuê (Chọn ngày bắt đầu và kết thúc sẽ tự tính tổng giá)</label>
+                    <br>
+                    <input type="text" id="total_price" name="total_price" class="form-control" readonly>
+                </div>
+
+                <button type="submit">Xác nhận</button>
+            </form>
         </div>
-
-        <div class="form-group">
-            <label for="end_date">Ngày kết thúc:</label>
-            <input type="date" id="end_date" name="end_date" class="form-control" required>
+    </div>
+    @if (session('success'))
+        <div id="success-message" class="alert alert-success">
+            {{ session('success') }}
         </div>
-
-        <div class="form-group">
-            <label for="total_price">Tổng giá thuê:</label>
-            <input type="text" id="total_price" name="total_price" class="form-control" readonly>
-        </div>
-
-        <button type="submit" class="btn btn-success">xac nhan sua</button>
-    </form>
+    @endif
 
 </body>
 <script>
@@ -185,6 +324,18 @@
         startDateInput.addEventListener('change', calculateTotalPrice);
         endDateInput.addEventListener('change', calculateTotalPrice);
     });
+    //
+    profileLogout = document.getElementById("profile-logout");
+        profileLogoutContent = document.getElementById("profile-logout-content");
+        profileLogoutContent.style.display = "none";
+        profileLogout.addEventListener("click",(e) => {
+            e.stopPropagation();
+            profileLogoutContent.style.display = profileLogoutContent.style.display === "none" ? "flex" : "none";
+        })
+        document.addEventListener("click",(e) => {
+            if(profileLogoutContent.style.display === 'flex')
+            profileLogoutContent.style.display = 'none';
+        })
 </script>
 
 </html>

@@ -18,7 +18,11 @@ class CarController extends Controller
     public function index(Request $request)
     {
         $trademark = $request->get('trademark');
-
+        $search = $request->get('search');
+        $cars = Car::query();
+        if ($search) {
+            $cars->whereRaw("REPLACE(LOWER(name), ' ', '') LIKE ?", ['%' . str_replace(' ', '', strtolower($search)) . '%']);
+        }
         if ($trademark && $trademark !== 'all') {
             // Lọc theo loại xe và thêm phân trang với query string
             $cars = Car::where('trademark', $trademark)->paginate(9)->onEachSide(1)->withQueryString();
@@ -33,8 +37,9 @@ class CarController extends Controller
             'Land-Rover', 'Lexus', 'Mercedes-Benz', 'Rolls-Royce'
         ];
 
-        return view('car.show_car', compact('cars', 'trademarks', 'trademark'));
+        return view('car.show_car', compact('cars', 'trademarks', 'trademark', 'search'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -79,9 +84,37 @@ class CarController extends Controller
     }
 
 
-    return redirect('/car/create')->with('success', 'Thêm xe thành công');
+    // return redirect('/car/create')->with('success', 'Thêm xe thành công');
+    return redirect()->back()->withInput()->with('activeForm', 'addCar')->with('success', 'Thêm xe thành công');
     }
 
+    // public function show($id, Request $request)
+    // {
+    //     $car = Car::with('reviews.user')->findOrFail($id);
+    //     $averageRating = Review::where('car_id', $id)->avg('rating');
+    //     $quantity = Review::where('car_id', $id)->count();
+
+    //     // Lấy số lượng đánh giá theo từng sao
+    //     $reviewCounts = Review::where('car_id', $id)
+    //         ->selectRaw('rating, COUNT(*) as count')
+    //         ->groupBy('rating')
+    //         ->pluck('count', 'rating');
+
+    //     // Lọc theo số sao (nếu có)
+    //     $rating = $request->query('rating');
+    //     $reviewsQuery = Review::where('car_id', $id)
+    //         ->when($rating, function ($query, $rating) {
+    //             return $query->where('rating', $rating);
+    //         })
+    //         ->latest();
+
+    //     // Luôn phân trang và giữ tham số trên URL
+    //     $reviews = $reviewsQuery->paginate(5)->onEachSide(1)->withQueryString();
+
+
+
+    //     return view('car.car_id', compact('car', 'averageRating', 'quantity', 'reviews', 'rating', 'reviewCounts'));
+    // }
     public function show($id, Request $request)
     {
         $car = Car::with('reviews.user')->findOrFail($id);
@@ -102,11 +135,30 @@ class CarController extends Controller
             })
             ->latest();
 
-        // Luôn phân trang và giữ tham số trên URL
         $reviews = $reviewsQuery->paginate(5)->onEachSide(1)->withQueryString();
 
-        return view('car.car_id', compact('car', 'averageRating', 'quantity', 'reviews', 'rating', 'reviewCounts'));
+        // Kiểm tra đơn hàng hợp lệ chưa được review
+        $eligibleBookings = [];
+        if (auth()->check()) {
+            $userBookings = $car->bookings()
+                ->where('user_id', auth()->id())
+                ->where('browsing_status', true)
+                ->where('admin_give_back', true)
+                ->get();
+
+            foreach ($userBookings as $booking) {
+                $hasReviewed = Review::where('booking_id', $booking->id)->exists();
+
+                if (!$hasReviewed) {
+                    $eligibleBookings[] = $booking;
+                }
+            }
+        }
+
+        return view('car.car_id', compact('car', 'averageRating', 'quantity', 'reviews', 'rating', 'reviewCounts', 'eligibleBookings'));
     }
+
+
 
     /**
      * Show the form for editing the specified resource.

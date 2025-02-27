@@ -28,7 +28,7 @@ class StoreCarRequest extends FormRequest
             ],
             'description' => 'required',
             'name' => 'required',
-            'seat_count' => 'required|integer|min:4',
+            'seat_count' => 'required|integer|min:2',
             'price_per_day' => 'required|integer|min:1',
             'quantity' => 'required|integer|min:1',
             'remaining_quantity' => 'required|integer|min:0|lte:quantity'
@@ -43,7 +43,7 @@ class StoreCarRequest extends FormRequest
             'name.required' => 'Tên xe không được để trống.',
             'seat_count.required' => 'Số chỗ ngồi không được để trống.',
             'seat_count.integer' => 'Số chỗ ngồi phải là số nguyên.',
-            'seat_count.min' => 'Số chỗ ngồi phải lớn hơn 4.',
+            'seat_count.min' => 'Số chỗ ngồi phải lớn hơn 2.',
             'price_per_day.required' => 'giá thuê không được để trống.',
             'price_per_day.integer' => 'giá thuê phải là số nguyên.',
             'price_per_day.min' => 'giá thuê không thể nhỏ hơn 1',

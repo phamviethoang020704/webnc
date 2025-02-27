@@ -105,7 +105,7 @@
             height: 25px;
         }
         #booking-items{
-            height: 200px;
+            height: 165px;
         }
         #booking-items img{
             width: 160px;
@@ -132,6 +132,9 @@
             border: none;
             padding: 5px;
             cursor: pointer;
+        }
+        hr{
+            border: 1px solid #ddd;
         }
     </style>
 </head>
@@ -177,7 +180,7 @@
                         </div>
                     </div>
                     <div id="edit-delete">
-                        <a href="{{Route('booking.edit',$booking->id)}}">Sửa đơn hàng</a>
+                        <a href="{{route('booking.edit',[$booking->id,$booking->car->id])}}">Sửa đơn hàng</a>
                         <form action="{{route('booking.destroy', $booking->id)}}" method="POST" onsubmit="return confirm('Ban co chac muon xoa don thue xe nay?');">
                             @csrf
                             @method('DELETE')

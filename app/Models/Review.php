@@ -10,7 +10,7 @@ use App\Models\RepComment;
 class Review extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id','car_id','rating','comment'];
+    protected $fillable = ['user_id','car_id','rating','comment','booking_id'];
     public function user(){
         return $this->belongsTo(User::class);
     }
@@ -19,5 +19,8 @@ class Review extends Model
     }
     public function repComments(){
         return $this->hasMany(RepComment::class);
+    }
+    public function booking(){
+        return $this->belongsTo(Booking::class);
     }
 }
