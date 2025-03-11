@@ -18,5 +18,9 @@ php artisan migrate --seed<br>
 php artisan storage:link<br>
 php artisan serve<br>
 
+### Giao diện sản phẩm
+
+![Image](https://github.com/user-attachments/assets/98daa18d-a4a8-4427-8e31-c4a56fd3c609)
+
 
 
